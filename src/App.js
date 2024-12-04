@@ -1,24 +1,22 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import Login from './login/Login'; 
+
+
+const onSubmitLogin = () => {
+  alert("Login successful");
+}
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <div className="Login">
+        <Login onSubmit={onSubmitLogin}/> {/* 顯示登入頁面 */}
+      </div>
+      
+      <div className="Select">
+      </div>
+    </>
   );
 }
 
