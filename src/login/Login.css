@@ -1,62 +1,85 @@
-/* src/Login.css */
-
+/* 整體容器 */
 .login-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  flex-direction: column; /* 讓所有內容垂直排列 */
   height: 100vh;
-  background-color: #f4f4f9;
+  background-color: #f9f9f9;
 }
 
-h2 {
-  margin-bottom: 20px; /* 設置登入標題與表單的間距 */
-  font-size: 28px;
+/* 標題樣式 */
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
   color: #333;
 }
 
+/* 表單樣式 */
 .login-form {
+  display: flex;
+  flex-direction: column; /* 垂直排列 */
+  align-items: center; /* 內容水平居中 */
   background-color: #fff;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 300px; /* 調整表單寬度 */
+  width: 300px;
 }
-
-.input-group {
+/* 表單組樣式 */
+.form-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* 標籤與輸入框兩端對齊 */
   margin-bottom: 15px;
 }
 
-.input-group label {
-  font-size: 14px;
-  color: #555;
+.form-group label {
+  font-size: 16px;
+  color: #333;
+  margin-right: 10px;
+  width: 100px; /* 固定寬度確保對齊 */
+  text-align: right; /* 右對齊標籤文字 */
 }
 
-.input-group input {
-  width: 100%; /* 確保輸入框寬度佔滿父容器 */
+/* 輸入框樣式 */
+.login-input {
   padding: 10px;
-  margin-top: 5px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-sizing: border-box; /* 計算寬度時包括內邊距和邊框 */
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+  flex: 1; /* 填滿剩餘空間 */
 }
 
+/* 錯誤訊息樣式 */
 .error-message {
   color: red;
-  font-size: 12px;
+  font-size: 14px;
+  margin-top: -10px;
   margin-bottom: 10px;
 }
 
+/* 提交按鈕樣式 */
 .login-button {
-  width: 100%;
+  width: 40%;
   padding: 10px;
-  background-color: #4CAF50;
+  font-size: 16px;
+  background-color: #4caf50;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
+  flex: 1;
+  transition: background-color 0.3s ease;
+  margin: 0 auto; /* 讓按鈕水平居中 */
 }
 
-.login-button:hover {
+.login-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.login-button:hover:not(:disabled) {
   background-color: #45a049;
 }

@@ -12,7 +12,6 @@ const Login = ({onSubmit}) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setErrorMessage("");
 
     const payload = {
       Login: username,
@@ -40,7 +39,7 @@ const Login = ({onSubmit}) => {
       onSubmit();
 
     } catch (error) {
-      setErrorMessage(error.response ? error.response.data.message : "Login failed.");
+      setErrorMessage("Login failed.");
       console.error("Login error: " + JSON.stringify(error));
     } finally {
       setLoading(false);
@@ -49,21 +48,24 @@ const Login = ({onSubmit}) => {
 
   return (
     <div className="login-container">
-      <h2>登入頁面</h2>
+      <h1>登入頁面</h1>
       <form onSubmit={handleSubmit} className="login-form">
-        <div className="input-group">
-          <label htmlFor="username">Username</label>
+        {/* 用戶名輸入框 */}
+        <div className="form-group">
+          <label htmlFor="username">帳號：</label>
           <input
             type="text"
             id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder="請輸入用戶名"
+            placeholder="請輸入帳號"
             required
+            className="login-input"
           />
         </div>
-        <div className="input-group">
-          <label htmlFor="password">Password</label>
+        {/* 密碼輸入框 */}
+        <div className="form-group">
+          <label htmlFor="password">密碼：</label>
           <input
             type="password"
             id="password"
@@ -71,11 +73,14 @@ const Login = ({onSubmit}) => {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="請輸入密碼"
             required
+            className="login-input"
           />
         </div>
+        {/* 錯誤訊息 */}
         {errorMessage && <p className="error-message">{errorMessage}</p>}
-        <button type="submit" disabled={loading}>
-          {loading ? "Logging in..." : "Login"}
+        {/* 提交按鈕 */}
+        <button type="submit" disabled={loading} className="login-button">
+          {loading ? "登入中..." : "登入"}
         </button>
       </form>
     </div>
