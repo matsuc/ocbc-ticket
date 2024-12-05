@@ -36,7 +36,7 @@ const Login = ({onSubmit}) => {
       console.info("Login successful", { userId, token });
 
       // TODO: 跳轉到登入後頁面
-      onSubmit();
+      onSubmit(userId, token);
 
     } catch (error) {
       setErrorMessage("Login failed.");

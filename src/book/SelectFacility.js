@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./SelectFacility.css";
 
-const SelectFacility = ({onSubmit}) => {
+const SelectFacility = ({userId, onSubmit}) => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
@@ -18,6 +19,46 @@ const SelectFacility = ({onSubmit}) => {
   // 格式化時間
   const formatDateTime = (date) =>
     `${date.toLocaleDateString()} ${date.toLocaleTimeString("en-GB")}`;
+
+  // 表單提交處理
+  const handleSearchSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      // data format: "YYYY-MM-DDThh:mm:ss"
+      const selectedDateTime = `${selectedDate}T${selectedTime}:00`;
+
+      const params = {
+        "clubId": 1,
+        "startDate": selectedDateTime,
+        "zoneTypeId": 31
+      };
+
+      const response = await axios.get("/api/clientportal2/FacilityBookings/BookFacility/Start", {
+        params: params,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+
+      alert(JSON.stringify(response.headers));
+
+      // const sessionId = response.headers["Cp-Book-Facility-Session-Id"];
+      // alert("Session ID: " + sessionId);
+      const possibleDurations = response.data.Data.UsersBookingPossibilities[userId].PossibleDurations;
+      alert("可用時長: " + JSON.stringify(possibleDurations));
+      const availableCourts = Object.keys(possibleDurations).filter(court => {
+        const info = possibleDurations[court];
+        return info[selectedDate]?.includes(String(selectedLength));
+      });
+  
+      console.log("可用場地:", availableCourts);
+
+    } catch (error) {
+      alert("Error: " + JSON.stringify(error));
+    }
+  };
 
   // 表單提交處理
   const handleSubmit = (e) => {
@@ -84,7 +125,7 @@ const SelectFacility = ({onSubmit}) => {
         </div>
         {/* 提交按鈕 */}
         <div className="form-group buttons-group">
-          <button type="button" className="facility-button" onClick={handleSubmit}>
+          <button type="button" className="facility-button" onClick={handleSearchSubmit}>
             查詢
           </button>
           <button type="submit" className="facility-button" onClick={handleSubmit}>
