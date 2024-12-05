@@ -1,0 +1,89 @@
+/* 容器樣式 */
+.select-facility-container {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  width: 400px;
+  margin: 100px auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 標題樣式 */
+.select-facility-container h1 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* 當前時間樣式 */
+.current-time {
+  font-size: 16px;
+  color: #666;
+  margin: 10px 0 20px;
+}
+
+/* 表單樣式 */
+.facility-form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 15px;
+  width: 100%;
+}
+
+/* 表單組樣式 */
+.form-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* 標籤樣式 */
+.form-group label {
+  font-size: 16px;
+  color: #333;
+  margin-right: 10px;
+  width: 100px; /* 固定寬度確保對齊 */
+  text-align: right; /* 右對齊標籤文字 */
+}
+
+/* 輸入框樣式 */
+.facility-input {
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  flex: 1; /* 填滿剩餘空間 */
+}
+
+/* 下拉框樣式 */
+.facility-select {
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  flex: 1; /* 填滿剩餘空間 */
+}
+
+/* 按鈕樣式 */
+.facility-button {
+  align-self: center; /* 居中對齊按鈕 */
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.facility-button:hover {
+  background-color: #45a049;
+}

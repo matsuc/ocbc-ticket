@@ -1,21 +1,18 @@
-import React from 'react';
-import './App.css';
+import React, { useState } from "react";
 import Login from './login/Login'; 
-
-
-const onSubmitLogin = () => {
-  alert("Login successful");
-}
+import SelectFacility from './book/SelectFacility';
 
 function App() {
+  const [currentPage, setCurrentPage] = useState("login"); // 管理當前頁面
+
+  const onSubmitLogin = () => {
+    setCurrentPage("selectFacility"); // 切換到選擇場地頁面
+  };
+
   return (
     <>
-      <div className="Login">
-        <Login onSubmit={onSubmitLogin}/> {/* 顯示登入頁面 */}
-      </div>
-      
-      <div className="Select">
-      </div>
+      {currentPage === "login" && <Login onSubmit={onSubmitLogin} />}
+      {currentPage === "selectFacility" && <SelectFacility />}
     </>
   );
 }

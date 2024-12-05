@@ -22,30 +22,26 @@ const Login = ({onSubmit}) => {
 
     try {
       // 使用 axios 發送 POST 請求
-      const response = await axios.post("https://sportshub.perfectgym.com/clientportal2/Auth/Login", payload, {
+      const response = await axios.post("/api/clientportal2/Auth/Login", payload, {
         headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json, text/plain, */*",
-          "Origin": "https://sportshub.perfectgym.com",
-          "Referer": "https://sportshub.perfectgym.com/clientportal2/",
-          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 Edg/127.0.0.0",
+          "Content-Type": "application/json"
         },
+        withCredentials: true
       });
 
       // Axios 會自動處理 JSON 回應
-      const cookies = response.headers["set-cookie"].split(";")[0];
       const token = response.headers["jwt-token"];
       const userId = response.data.User.Member.Id;
 
       // 登入成功後，執行相應的操作
-      console.log("Login successful", { cookies, userId, token });
+      console.info("Login successful", { userId, token });
 
       // TODO: 跳轉到登入後頁面
       onSubmit();
 
     } catch (error) {
       setErrorMessage(error.response ? error.response.data.message : "Login failed.");
-      console.error("Login error: ", error);
+      console.error("Login error: " + JSON.stringify(error));
     } finally {
       setLoading(false);
     }
@@ -53,7 +49,7 @@ const Login = ({onSubmit}) => {
 
   return (
     <div className="login-container">
-      <h2 className="login-title">Login</h2>
+      <h2>登入頁面</h2>
       <form onSubmit={handleSubmit} className="login-form">
         <div className="input-group">
           <label htmlFor="username">Username</label>
@@ -62,7 +58,8 @@ const Login = ({onSubmit}) => {
             id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder="Enter your username"
+            placeholder="請輸入用戶名"
+            required
           />
         </div>
         <div className="input-group">
@@ -72,7 +69,8 @@ const Login = ({onSubmit}) => {
             id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter your password"
+            placeholder="請輸入密碼"
+            required
           />
         </div>
         {errorMessage && <p className="error-message">{errorMessage}</p>}
