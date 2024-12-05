@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./SelectFacility.css";
 
-const SelectFacility = () => {
+const SelectFacility = ({onSubmit}) => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
@@ -25,13 +25,14 @@ const SelectFacility = () => {
     alert(
       `您已選擇：\n日期：${selectedDate}\n時間：${selectedTime}\n長度：${selectedLength} 分鐘`
     );
+    onSubmit();
   };
 
   return (
     <div className="select-facility-container">
       <h1>選擇場地</h1>
       <p className="current-time">當前時間：{formatDateTime(currentTime)}</p>
-      <form className="facility-form" onSubmit={handleSubmit}>
+      <form className="facility-form">
         {/* 日期選擇 */}
         <div className="form-group">
           <label htmlFor="date">日期：</label>
@@ -47,32 +48,49 @@ const SelectFacility = () => {
         {/* 時間選擇 */}
         <div className="form-group">
           <label htmlFor="time">時間：</label>
-          <input
+          <select
             id="time"
-            type="time"
             value={selectedTime}
             onChange={(e) => setSelectedTime(e.target.value)}
             required
-            className="facility-input"
-          />
+            className="facility-select"
+          >
+            {Array.from({ length: 24 }, (_, hour) => (
+              <option key={hour} value={`${hour.toString().padStart(2, "0")}:00`}>
+                {hour.toString().padStart(2, "0")}:00
+              </option>
+            ))}
+          </select>
         </div>
         {/* 長度選擇 */}
         <div className="form-group">
           <label htmlFor="length">長度：</label>
-          <select
-            id="length"
-            value={selectedLength}
-            onChange={(e) => setSelectedLength(e.target.value)}
-            className="facility-select"
-          >
-            <option value="60">60 分鐘</option>
-            <option value="120">120 分鐘</option>
-          </select>
+          <div className="length-buttons">
+            <button
+              type="button"
+              className={`length-button ${selectedLength === "60" ? "active" : ""}`}
+              onClick={() => setSelectedLength("60")}
+            >
+              60 分鐘
+            </button>
+            <button
+              type="button"
+              className={`length-button ${selectedLength === "120" ? "active" : ""}`}
+              onClick={() => setSelectedLength("120")}
+            >
+              120 分鐘
+            </button>
+          </div>
         </div>
         {/* 提交按鈕 */}
-        <button type="submit" className="facility-button">
-          確定
-        </button>
+        <div className="form-group buttons-group">
+          <button type="button" className="facility-button" onClick={handleSubmit}>
+            查詢
+          </button>
+          <button type="submit" className="facility-button" onClick={handleSubmit}>
+            確定
+          </button>
+        </div>
       </form>
     </div>
   );
