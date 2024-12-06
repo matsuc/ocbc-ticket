@@ -7,6 +7,7 @@ const SelectFacility = ({userId, onSubmit}) => {
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [selectedLength, setSelectedLength] = useState("60");
+  const [loading, setLoading] = useState(false);
 
   // 更新當前時間
   useEffect(() => {
@@ -20,9 +21,10 @@ const SelectFacility = ({userId, onSubmit}) => {
   const formatDateTime = (date) =>
     `${date.toLocaleDateString()} ${date.toLocaleTimeString("en-GB")}`;
 
-  // 表單提交處理
-  const handleSearchSubmit = async (e) => {
+  // 查詢可用場地
+  const searchAvailableCourts = async (e, show) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       // data format: "YYYY-MM-DDThh:mm:ss"
@@ -42,31 +44,41 @@ const SelectFacility = ({userId, onSubmit}) => {
         withCredentials: true,
       });
 
-      alert(JSON.stringify(response.headers));
+      // alert(JSON.stringify(response.headers));
 
       // const sessionId = response.headers["Cp-Book-Facility-Session-Id"];
       // alert("Session ID: " + sessionId);
       const possibleDurations = response.data.Data.UsersBookingPossibilities[userId].PossibleDurations;
-      alert("可用時長: " + JSON.stringify(possibleDurations));
-      const availableCourts = Object.keys(possibleDurations).filter(court => {
-        const info = possibleDurations[court];
-        return info[selectedDate]?.includes(String(selectedLength));
-      });
-  
-      console.log("可用場地:", availableCourts);
+      const availableCourts = Object.keys(possibleDurations)
+        .filter(court => {
+          const info = possibleDurations[court];
+          return info[selectedDateTime]?.[String(selectedLength)];
+        })
+
+      return availableCourts;
 
     } catch (error) {
       alert("Error: " + JSON.stringify(error));
+    } finally {
+      setLoading(false);
+    }    
+  };
+
+  // 表單提交處理
+  const handleSearchSubmit = async (e) => {
+    e.preventDefault();
+    const availableCourts = await searchAvailableCourts(e, true);
+    if (availableCourts !== undefined) {
+      alert(availableCourts.length === 0 ? "沒有可用場地" : `可用場地: ${availableCourts.map(court => court - 70)}`);
     }
   };
 
   // 表單提交處理
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert(
-      `您已選擇：\n日期：${selectedDate}\n時間：${selectedTime}\n長度：${selectedLength} 分鐘`
-    );
-    onSubmit();
+    const availableCourts = await searchAvailableCourts(e, false);
+
+    onSubmit(selectedDate, selectedTime, selectedLength, availableCourts);
   };
 
   return (
@@ -125,10 +137,10 @@ const SelectFacility = ({userId, onSubmit}) => {
         </div>
         {/* 提交按鈕 */}
         <div className="form-group buttons-group">
-          <button type="button" className="facility-button" onClick={handleSearchSubmit}>
+          <button type="button" disabled={loading} className="facility-button" onClick={handleSearchSubmit}>
             查詢
           </button>
-          <button type="submit" className="facility-button" onClick={handleSubmit}>
+          <button type="submit" disabled={loading} className="facility-button" onClick={handleSubmit}>
             確定
           </button>
         </div>
