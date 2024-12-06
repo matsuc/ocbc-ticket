@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/ocbc-ticket/static/css/main.2ea9f7a0.css",
-    "main.js": "/ocbc-ticket/static/js/main.52ad80a1.js",
-    "static/js/453.ed3810f9.chunk.js": "/ocbc-ticket/static/js/453.ed3810f9.chunk.js",
-    "index.html": "/ocbc-ticket/index.html",
-    "main.2ea9f7a0.css.map": "/ocbc-ticket/static/css/main.2ea9f7a0.css.map",
-    "main.52ad80a1.js.map": "/ocbc-ticket/static/js/main.52ad80a1.js.map",
-    "453.ed3810f9.chunk.js.map": "/ocbc-ticket/static/js/453.ed3810f9.chunk.js.map"
+    "main.css": "./static/css/main.2ea9f7a0.css",
+    "main.js": "./static/js/main.c9ff6ff5.js",
+    "static/js/453.ed3810f9.chunk.js": "./static/js/453.ed3810f9.chunk.js",
+    "index.html": "./index.html",
+    "main.2ea9f7a0.css.map": "./static/css/main.2ea9f7a0.css.map",
+    "main.c9ff6ff5.js.map": "./static/js/main.c9ff6ff5.js.map",
+    "453.ed3810f9.chunk.js.map": "./static/js/453.ed3810f9.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.2ea9f7a0.css",
-    "static/js/main.52ad80a1.js"
+    "static/js/main.c9ff6ff5.js"
   ]
 }
