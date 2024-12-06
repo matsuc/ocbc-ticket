@@ -22,7 +22,7 @@ const SelectFacility = ({ userId, onSubmit }) => {
     `${date.toLocaleDateString()} ${date.toLocaleTimeString('en-GB')}`;
 
   // 查詢可用場地
-  const searchAvailableCourts = async (e, show) => {
+  const searchAvailableCourts = async (e) => {
     e.preventDefault();
     setLoading(true);
 
@@ -47,20 +47,19 @@ const SelectFacility = ({ userId, onSubmit }) => {
         },
       );
 
-      // alert(JSON.stringify(response.headers));
-
-      // const sessionId = response.headers["Cp-Book-Facility-Session-Id"];
-      // alert("Session ID: " + sessionId);
+      const sessionId = response.headers['cp-book-facility-session-id'];
       const possibleDurations =
         response.data.Data.UsersBookingPossibilities[userId].PossibleDurations;
+
       const availableCourts = Object.keys(possibleDurations).filter((court) => {
         const info = possibleDurations[court];
         return info[selectedDateTime]?.[String(selectedLength)];
       });
 
-      return availableCourts;
+      return { sessionId, availableCourts };
     } catch (error) {
       alert('Error: ' + JSON.stringify(error));
+      return {}; // 如果有錯誤，返回一個空對象
     } finally {
       setLoading(false);
     }
@@ -69,7 +68,7 @@ const SelectFacility = ({ userId, onSubmit }) => {
   // 表單提交處理
   const handleSearchSubmit = async (e) => {
     e.preventDefault();
-    const availableCourts = await searchAvailableCourts(e, true);
+    const availableCourts = await searchAvailableCourts(e);
     if (availableCourts !== undefined) {
       alert(
         availableCourts.length === 0
@@ -82,9 +81,19 @@ const SelectFacility = ({ userId, onSubmit }) => {
   // 表單提交處理
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const availableCourts = await searchAvailableCourts(e, false);
+    const { sessionId, availableCourts } = await searchAvailableCourts(e);
 
-    onSubmit(selectedDate, selectedTime, selectedLength, availableCourts);
+    if (availableCourts && availableCourts.length === 0) {
+      alert('沒有可用場地');
+    } else {
+      onSubmit(
+        sessionId,
+        selectedDate,
+        selectedTime,
+        selectedLength,
+        availableCourts,
+      );
+    }
   };
 
   return (

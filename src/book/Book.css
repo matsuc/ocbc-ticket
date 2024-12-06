@@ -33,6 +33,12 @@ h1 {
   margin-bottom: 20px;
 }
 
+.start-button.cancel {
+  background-color: #e53935;
+  color: white; /* 白色文字 */
+  border-color: #e53935;
+}
+
 .reselect-button {
   display: block;
   width: 100%;

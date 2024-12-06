@@ -24,6 +24,20 @@ function ConfirmSelection({
   const formatDateTime = (date) =>
     `${date.toLocaleDateString()} ${date.toLocaleTimeString('en-GB')}`;
 
+  const getDayOfWeek = (date) => {
+    const daysOfWeek = [
+      '星期日',
+      '星期一',
+      '星期二',
+      '星期三',
+      '星期四',
+      '星期五',
+      '星期六',
+    ];
+    const dayIndex = new Date(date).getDay(); // 0-6, 代表星期天到星期六
+    return daysOfWeek[dayIndex];
+  };
+
   const handleCourtClick = (court) => {
     setSelectedCourt(court === selectedCourt ? null : court); // 點擊已選場地會取消選擇
   };
@@ -34,7 +48,7 @@ function ConfirmSelection({
       <p className="current-time">當前時間：{formatDateTime(currentTime)}</p>
       <div className="confirm-selection-details">
         <p>
-          <strong>日期:</strong> {selectedDate}
+          <strong>日期:</strong> {selectedDate} ({getDayOfWeek(selectedDate)})
         </p>
         <p>
           <strong>時間:</strong> {selectedTime}
