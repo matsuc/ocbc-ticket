@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Login from './login/Login';
 import SelectFacility from './book/SelectFacility';
 import ConfirmSelection from './book/ConfirmSelection';
@@ -15,7 +15,21 @@ function App() {
   const [availableCourts, setAvailableCourts] = useState([]);
   const [selectedCourt, setSelectedCourt] = useState('');
 
+  useEffect(() => {
+    const storedUserId = localStorage.getItem('userId');
+    const storedToken = localStorage.getItem('token');
+
+    if (storedUserId && storedToken) {
+      setUserId(storedUserId);
+      setToken(storedToken);
+      setCurrentPage('selectFacility'); // 如果已有登入資訊，直接跳轉到選擇場地頁面
+    }
+  }, []);
+
   const onSubmitLogin = (userId, token) => {
+    // 登入後，將用戶信息存入 localStorage
+    localStorage.setItem('userId', userId);
+    localStorage.setItem('token', token);
     setUserId(userId);
     setToken(token);
     setCurrentPage('selectFacility'); // 切換到選擇場地頁面
@@ -52,6 +66,15 @@ function App() {
 
   const onReSelectCourt = () => {
     setCurrentPage('selectFacility'); // 切換到選擇場地頁面
+  };
+
+  const onLogout = () => {
+    // 登出時清除 localStorage 中的用戶資訊
+    localStorage.removeItem('userId');
+    localStorage.removeItem('token');
+    setUserId('');
+    setToken('');
+    setCurrentPage('login'); // 切換到登入頁面
   };
 
   return (

@@ -58,7 +58,7 @@ const SelectFacility = ({ userId, onSubmit }) => {
 
       return { sessionId, availableCourts };
     } catch (error) {
-      alert('Error: ' + JSON.stringify(error));
+      alert('Error: ' + JSON.stringify(error.message));
       return {}; // 如果有錯誤，返回一個空對象
     } finally {
       setLoading(false);
@@ -68,7 +68,7 @@ const SelectFacility = ({ userId, onSubmit }) => {
   // 表單提交處理
   const handleSearchSubmit = async (e) => {
     e.preventDefault();
-    const availableCourts = await searchAvailableCourts(e);
+    const { availableCourts } = await searchAvailableCourts(e);
     if (availableCourts !== undefined) {
       alert(
         availableCourts.length === 0
@@ -83,7 +83,8 @@ const SelectFacility = ({ userId, onSubmit }) => {
     e.preventDefault();
     const { sessionId, availableCourts } = await searchAvailableCourts(e);
 
-    if (availableCourts && availableCourts.length === 0) {
+    if (availableCourts === undefined) { return; }
+    else if (availableCourts.length === 0) {
       alert('沒有可用場地');
     } else {
       onSubmit(

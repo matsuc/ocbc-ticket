@@ -76,14 +76,14 @@ function ConfirmSelection({
         </div>
       </div>
       <div className="confirm-selection-actions">
+        <button className="cancel-button" onClick={onCancel}>
+          取消
+        </button>
         <button
           className="confirm-button"
           onClick={() => onConfirm(selectedCourt)}
         >
           確認
-        </button>
-        <button className="cancel-button" onClick={onCancel}>
-          取消
         </button>
       </div>
     </div>

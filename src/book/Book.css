@@ -1,14 +1,26 @@
 .start-booking-container {
   font-family: Arial, sans-serif;
+  text-align: left;
   padding: 20px;
   background-color: #f9f9f9;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 400px;
-  margin: 50px auto;
+  margin: 10% auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: left;
 }
 
 h1 {
+  text-align: center;
+}
+
+/* 當前時間樣式 */
+.current-time {
+  font-size: 16px;
+  color: #666;
+  margin: 0px 0 10px;
   text-align: center;
 }
 
@@ -30,13 +42,30 @@ h1 {
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .start-button.cancel {
-  background-color: #e53935;
+  background-color: #f44336;
   color: white; /* 白色文字 */
-  border-color: #e53935;
+  border-color: #f44336;
+}
+
+.start-button.cancel:hover {
+  background-color: #e53935;
+}
+
+/* 輸入框樣式 */
+.login-input {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 6%;
+  text-align: center;
+  flex: 1; /* 填滿剩餘空間 */
 }
 
 .reselect-button {
@@ -44,7 +73,7 @@ h1 {
   width: 100%;
   padding: 10px;
   font-size: 16px;
-  background-color: #e53935;
+  background-color: #2196f3;
   color: white;
   border: none;
   border-radius: 5px;
@@ -57,7 +86,8 @@ h1 {
 }
 
 .log-container {
-  margin-top: 20px;
+  margin-top: 10px;
+  text-align: left;
 }
 
 .log-box {
