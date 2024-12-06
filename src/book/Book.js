@@ -61,11 +61,10 @@ const Book = ({
       };
 
       const response = await axios.post(
-        '/api/clientportal2/FacilityBookings/WizardSteps/SetFacilityBookingDetailsWizardStep/Next',
+        'http://localhost:3000/api/proxy/clientportal2/FacilityBookings/WizardSteps/SetFacilityBookingDetailsWizardStep/Next',
         payload,
         {
           headers: {
-            'Content-Type': 'application/json',
             'Cp-Book-Facility-Session-Id': sessionId,
           },
           withCredentials: true,
@@ -99,11 +98,10 @@ const Book = ({
         };
 
         const response = await axios.post(
-          '/api/clientportal2/FacilityBookings/WizardSteps/ChooseBookingRuleStep/Next',
+          'http://localhost:3000/api/proxy/clientportal2/FacilityBookings/WizardSteps/ChooseBookingRuleStep/Next',
           payload,
           {
             headers: {
-              'Content-Type': 'application/json',
               'Cp-Book-Facility-Session-Id': sessionId,
             },
             withCredentials: true,

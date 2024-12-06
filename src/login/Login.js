@@ -22,7 +22,7 @@ const Login = ({ onSubmit }) => {
     try {
       // 使用 axios 發送 POST 請求
       const response = await axios.post(
-        '/api/proxy/clientportal2/Auth/Login',
+        'http://localhost:3000/api/proxy/clientportal2/Auth/Login',
         payload,
         {
           headers: {
@@ -31,6 +31,7 @@ const Login = ({ onSubmit }) => {
           withCredentials: true,
         },
       );
+      console.log(JSON.stringify(response.headers));
 
       // Axios 會自動處理 JSON 回應
       const token = response.headers['jwt-token'];

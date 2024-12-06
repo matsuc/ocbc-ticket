@@ -37,12 +37,9 @@ const SelectFacility = ({ userId, onSubmit }) => {
       };
 
       const response = await axios.get(
-        '/api/clientportal2/FacilityBookings/BookFacility/Start',
+        'http://localhost:3000/api/proxy/clientportal2/FacilityBookings/BookFacility/Start',
         {
           params: params,
-          headers: {
-            'Content-Type': 'application/json',
-          },
           withCredentials: true,
         },
       );
