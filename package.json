@@ -57,5 +57,5 @@
     "*.json": "prettier --write",
     "*.md": "prettier --write"
   },
-  "homepage": "https://matsuc.github.io/ocbc-ticket/"
+  "homepage": "."
 }

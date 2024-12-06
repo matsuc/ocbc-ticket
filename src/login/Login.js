@@ -22,7 +22,7 @@ const Login = ({ onSubmit }) => {
     try {
       // 使用 axios 發送 POST 請求
       const response = await axios.post(
-        '/api/clientportal2/Auth/Login',
+        '/api/proxy/clientportal2/Auth/Login',
         payload,
         {
           headers: {
