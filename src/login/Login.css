@@ -1,11 +1,17 @@
 /* 整體容器 */
 .login-container {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  width: 400px;
+  margin: 10% auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-color: #f9f9f9;
+  justify-content: center; /* 垂直居中 */
 }
 
 /* 標題樣式 */
@@ -19,36 +25,36 @@ h1 {
 .login-form {
   display: flex;
   flex-direction: column; /* 垂直排列 */
-  align-items: center; /* 內容水平居中 */
-  background-color: #fff;
-  padding: 20px;
+  text-align: center;
+  padding: 12px;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 300px;
+  width: 100%;
 }
+
 /* 表單組樣式 */
 .form-group {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* 標籤與輸入框兩端對齊 */
   margin-bottom: 15px;
+  text-align: center; /* 右對齊標籤文字 */
 }
 
 .form-group label {
   font-size: 16px;
   color: #333;
   margin-right: 10px;
-  width: 100px; /* 固定寬度確保對齊 */
+  /* background-color: red; */
+  width: 60px; /* 固定寬度確保對齊 */
   text-align: right; /* 右對齊標籤文字 */
 }
 
 /* 輸入框樣式 */
-.login-input {
+.form-group input {
   padding: 10px;
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  margin-right: 10px;
+  margin-right: 40px;
   flex: 1; /* 填滿剩餘空間 */
 }
 
@@ -73,6 +79,7 @@ h1 {
   flex: 1;
   transition: background-color 0.3s ease;
   margin: 0 auto; /* 讓按鈕水平居中 */
+  margin-top: 20px;
 }
 
 .login-button:disabled {

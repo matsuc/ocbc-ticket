@@ -83,8 +83,9 @@ const SelectFacility = ({ userId, onSubmit }) => {
     e.preventDefault();
     const { sessionId, availableCourts } = await searchAvailableCourts(e);
 
-    if (availableCourts === undefined) { return; }
-    else if (availableCourts.length === 0) {
+    if (availableCourts === undefined) {
+      return;
+    } else if (availableCourts.length === 0) {
       alert('沒有可用場地');
     } else {
       onSubmit(

@@ -88,7 +88,7 @@ const Book = ({
 
     let attempt = 0; // 当前尝试次数
     let success = false; // 标记是否成功
-  
+
     while (attempt < maxRetries && !success) {
       try {
         attempt++;
@@ -97,7 +97,7 @@ const Book = ({
           OtherCalendarEventBookedAtRequestedTime: false,
           HasUserRequiredProducts: false,
         };
-  
+
         const response = await axios.post(
           '/api/clientportal2/FacilityBookings/WizardSteps/ChooseBookingRuleStep/Next',
           payload,
@@ -107,11 +107,14 @@ const Book = ({
               'Cp-Book-Facility-Session-Id': sessionId,
             },
             withCredentials: true,
-          }
+          },
         );
-  
+
         // 记录成功响应并退出重试
-        setLogs((prevLogs) => [...prevLogs, `${new Date().toLocaleString()} 預約成功: ${response.data['Redirect']}`]);
+        setLogs((prevLogs) => [
+          ...prevLogs,
+          `${new Date().toLocaleString()} 預約成功: ${response.data['Redirect']}`,
+        ]);
         success = true;
       } catch (error) {
         // 如果是最后一次失败，记录错误信息
@@ -137,11 +140,15 @@ const Book = ({
     const currentTime = new Date();
 
     const currentYear = currentTime.getFullYear();
-    const currentMonth = (currentTime.getMonth() + 1).toString().padStart(2, '0');  // 确保月份是两位数
-    const currentDate = currentTime.getDate().toString().padStart(2, '0');  // 确保日期是两位数
-    
+    const currentMonth = (currentTime.getMonth() + 1)
+      .toString()
+      .padStart(2, '0'); // 确保月份是两位数
+    const currentDate = currentTime.getDate().toString().padStart(2, '0'); // 确保日期是两位数
+
     // 将目标时间字符串与当前日期结合，创建目标时间的 Date 对象
-    const targetTime = new Date(`${currentYear}-${currentMonth}-${currentDate}T${selectedTime}:00+08:00`);
+    const targetTime = new Date(
+      `${currentYear}-${currentMonth}-${currentDate}T${selectedTime}:00+08:00`,
+    );
     targetTime.setHours(targetTime.getHours() - 1);
     targetTime.setMinutes(targetMinute, targetSecond, 0); // 设置目标分钟和秒钟，设置毫秒为0
 
@@ -150,7 +157,6 @@ const Book = ({
 
     return timeToTarget;
   };
-
 
   // 添加 log 的功能
   const handleQuickBookClick = async (e) => {
@@ -168,7 +174,6 @@ const Book = ({
 
     setLoading(false);
   };
-
 
   // 添加 log 的功能
   const handleWaitBookClick = async (e) => {
@@ -198,7 +203,7 @@ const Book = ({
     if (timeoutId) {
       clearTimeout(timeoutId); // 清除定时器
       setLoading(false); // 取消时设置 loading 为 false
-      setLogs((prevLogs) => [...prevLogs, "預約取消"]);
+      setLogs((prevLogs) => [...prevLogs, '預約取消']);
     }
   };
 
@@ -227,14 +232,16 @@ const Book = ({
           <strong>場地:</strong> 場地 {selectedCourt - 70}
         </p>
         <p>
-          <strong>開始時間 (分/秒):</strong> <input
+          <strong>開始時間 (分/秒):</strong>{' '}
+          <input
             type="text"
             id="targetMinute"
             value={targetMinute}
             onChange={(e) => setTargetMinute(e.target.value)}
             required
             className="login-input"
-          />:
+          />
+          :
           <input
             type="text"
             id="targetSecond"
@@ -252,9 +259,29 @@ const Book = ({
       </button>
 
       {/* 開始預約按鈕 */}
-      {<button className={'start-button'} disabled={loading} onClick={handleQuickBookClick}>即刻預約...</button>}
-      {<button className={'start-button'} disabled={loading} onClick={handleWaitBookClick}>等待預約...</button>}
-      {loading && <button className={'start-button cancel'} onClick={handleCancelClick}>取消</button>}
+      {
+        <button
+          className={'start-button'}
+          disabled={loading}
+          onClick={handleQuickBookClick}
+        >
+          即刻預約...
+        </button>
+      }
+      {
+        <button
+          className={'start-button'}
+          disabled={loading}
+          onClick={handleWaitBookClick}
+        >
+          等待預約...
+        </button>
+      }
+      {loading && (
+        <button className={'start-button cancel'} onClick={handleCancelClick}>
+          取消
+        </button>
+      )}
 
       {/* 顯示日誌記錄 */}
       <div className="log-container">
