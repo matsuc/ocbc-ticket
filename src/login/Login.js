@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import axios from "axios";
-import "./Login.css"; // 可以根據需要自定義 CSS
+import React, { useState } from 'react';
+import axios from 'axios';
+import './Login.css'; // 可以根據需要自定義 CSS
 
-const Login = ({onSubmit}) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+const Login = ({ onSubmit }) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
   // 處理提交表單
@@ -21,26 +21,29 @@ const Login = ({onSubmit}) => {
 
     try {
       // 使用 axios 發送 POST 請求
-      const response = await axios.post("/api/clientportal2/Auth/Login", payload, {
-        headers: {
-          "Content-Type": "application/json"
+      const response = await axios.post(
+        '/api/clientportal2/Auth/Login',
+        payload,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
         },
-        withCredentials: true
-      });
+      );
 
       // Axios 會自動處理 JSON 回應
-      const token = response.headers["jwt-token"];
+      const token = response.headers['jwt-token'];
       const userId = response.data.User.Member.Id;
 
       // 登入成功後，執行相應的操作
-      console.info("Login successful", { userId, token });
+      console.info('Login successful', { userId, token });
 
       // TODO: 跳轉到登入後頁面
       onSubmit(userId, token);
-
     } catch (error) {
-      setErrorMessage("Login failed.");
-      console.error("Login error: " + JSON.stringify(error));
+      setErrorMessage('Login failed.');
+      console.error('Login error: ' + JSON.stringify(error));
     } finally {
       setLoading(false);
     }
@@ -80,7 +83,7 @@ const Login = ({onSubmit}) => {
         {errorMessage && <p className="error-message">{errorMessage}</p>}
         {/* 提交按鈕 */}
         <button type="submit" disabled={loading} className="login-button">
-          {loading ? "登入中..." : "登入"}
+          {loading ? '登入中...' : '登入'}
         </button>
       </form>
     </div>

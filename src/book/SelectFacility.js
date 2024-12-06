@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import "./SelectFacility.css";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import './SelectFacility.css';
 
-const SelectFacility = ({userId, onSubmit}) => {
+const SelectFacility = ({ userId, onSubmit }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState("");
-  const [selectedTime, setSelectedTime] = useState("");
-  const [selectedLength, setSelectedLength] = useState("60");
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedTime, setSelectedTime] = useState('');
+  const [selectedLength, setSelectedLength] = useState('60');
   const [loading, setLoading] = useState(false);
 
   // 更新當前時間
@@ -19,7 +19,7 @@ const SelectFacility = ({userId, onSubmit}) => {
 
   // 格式化時間
   const formatDateTime = (date) =>
-    `${date.toLocaleDateString()} ${date.toLocaleTimeString("en-GB")}`;
+    `${date.toLocaleDateString()} ${date.toLocaleTimeString('en-GB')}`;
 
   // 查詢可用場地
   const searchAvailableCourts = async (e, show) => {
@@ -31,37 +31,39 @@ const SelectFacility = ({userId, onSubmit}) => {
       const selectedDateTime = `${selectedDate}T${selectedTime}:00`;
 
       const params = {
-        "clubId": 1,
-        "startDate": selectedDateTime,
-        "zoneTypeId": 31
+        clubId: 1,
+        startDate: selectedDateTime,
+        zoneTypeId: 31,
       };
 
-      const response = await axios.get("/api/clientportal2/FacilityBookings/BookFacility/Start", {
-        params: params,
-        headers: {
-          "Content-Type": "application/json",
+      const response = await axios.get(
+        '/api/clientportal2/FacilityBookings/BookFacility/Start',
+        {
+          params: params,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
         },
-        withCredentials: true,
-      });
+      );
 
       // alert(JSON.stringify(response.headers));
 
       // const sessionId = response.headers["Cp-Book-Facility-Session-Id"];
       // alert("Session ID: " + sessionId);
-      const possibleDurations = response.data.Data.UsersBookingPossibilities[userId].PossibleDurations;
-      const availableCourts = Object.keys(possibleDurations)
-        .filter(court => {
-          const info = possibleDurations[court];
-          return info[selectedDateTime]?.[String(selectedLength)];
-        })
+      const possibleDurations =
+        response.data.Data.UsersBookingPossibilities[userId].PossibleDurations;
+      const availableCourts = Object.keys(possibleDurations).filter((court) => {
+        const info = possibleDurations[court];
+        return info[selectedDateTime]?.[String(selectedLength)];
+      });
 
       return availableCourts;
-
     } catch (error) {
-      alert("Error: " + JSON.stringify(error));
+      alert('Error: ' + JSON.stringify(error));
     } finally {
       setLoading(false);
-    }    
+    }
   };
 
   // 表單提交處理
@@ -69,7 +71,11 @@ const SelectFacility = ({userId, onSubmit}) => {
     e.preventDefault();
     const availableCourts = await searchAvailableCourts(e, true);
     if (availableCourts !== undefined) {
-      alert(availableCourts.length === 0 ? "沒有可用場地" : `可用場地: ${availableCourts.map(court => court - 70)}`);
+      alert(
+        availableCourts.length === 0
+          ? '沒有可用場地'
+          : `可用場地: ${availableCourts.map((court) => court - 70)}`,
+      );
     }
   };
 
@@ -109,8 +115,11 @@ const SelectFacility = ({userId, onSubmit}) => {
             className="facility-select"
           >
             {Array.from({ length: 24 }, (_, hour) => (
-              <option key={hour} value={`${hour.toString().padStart(2, "0")}:00`}>
-                {hour.toString().padStart(2, "0")}:00
+              <option
+                key={hour}
+                value={`${hour.toString().padStart(2, '0')}:00`}
+              >
+                {hour.toString().padStart(2, '0')}:00
               </option>
             ))}
           </select>
@@ -121,15 +130,15 @@ const SelectFacility = ({userId, onSubmit}) => {
           <div className="length-buttons">
             <button
               type="button"
-              className={`length-button ${selectedLength === "60" ? "active" : ""}`}
-              onClick={() => setSelectedLength("60")}
+              className={`length-button ${selectedLength === '60' ? 'active' : ''}`}
+              onClick={() => setSelectedLength('60')}
             >
               60 分鐘
             </button>
             <button
               type="button"
-              className={`length-button ${selectedLength === "120" ? "active" : ""}`}
-              onClick={() => setSelectedLength("120")}
+              className={`length-button ${selectedLength === '120' ? 'active' : ''}`}
+              onClick={() => setSelectedLength('120')}
             >
               120 分鐘
             </button>
@@ -137,10 +146,20 @@ const SelectFacility = ({userId, onSubmit}) => {
         </div>
         {/* 提交按鈕 */}
         <div className="form-group buttons-group">
-          <button type="button" disabled={loading} className="facility-button" onClick={handleSearchSubmit}>
+          <button
+            type="button"
+            disabled={loading}
+            className="facility-button"
+            onClick={handleSearchSubmit}
+          >
             查詢
           </button>
-          <button type="submit" disabled={loading} className="facility-button" onClick={handleSubmit}>
+          <button
+            type="submit"
+            disabled={loading}
+            className="facility-button"
+            onClick={handleSubmit}
+          >
             確定
           </button>
         </div>

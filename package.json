@@ -19,7 +19,10 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "prepare": "husky install",
+    "lint": "prettier --check .",
+    "format": "prettier --write ."
   },
   "eslintConfig": {
     "extends": [
@@ -44,6 +47,15 @@
     "husky": "^9.1.7",
     "lint-staged": "^15.2.10",
     "prettier": "^3.4.2"
+  },
+  "lint-staged": {
+    "*.js": "prettier --write",
+    "*.jsx": "prettier --write",
+    "*.ts": "prettier --write",
+    "*.tsx": "prettier --write",
+    "*.css": "prettier --write",
+    "*.json": "prettier --write",
+    "*.md": "prettier --write"
   },
   "homepage": "https://matsuc.github.io/ocbc-ticket/"
 }

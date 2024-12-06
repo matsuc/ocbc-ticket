@@ -1,111 +1,115 @@
 /* Confirm Selection Container */
 .confirm-selection-container {
-    font-family: Arial, sans-serif;
-    padding: 30px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    width: 400px;
-    margin: 100px auto;
-    text-align: center;
+  font-family: Arial, sans-serif;
+  padding: 30px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  margin: 100px auto;
+  text-align: center;
 }
 
 /* 當前時間樣式 */
 .current-time {
-    font-size: 16px;
-    color: #666;
-    margin: 10px 0 20px;
+  font-size: 16px;
+  color: #666;
+  margin: 10px 0 20px;
 }
 
 /* 標題樣式 */
 .confirm-selection-container h2 {
-    font-size: 26px;
-    color: #333;
-    margin-bottom: 20px;
-    text-align: center;
+  font-size: 26px;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 /* 詳情部分樣式 */
 .confirm-selection-details {
-    font-size: 16px;
-    color: #555;
-    margin-bottom: 20px;
-    margin-left: 40px;
-    text-align: left;
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 20px;
+  margin-left: 40px;
+  text-align: left;
 }
 
 /* 可選擇的場地項目 */
 .available-courts-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 10px;
-    justify-content: left;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+  justify-content: left;
 }
 
 .available-courts-item {
-    background-color: #f1f1f1;
-    padding: 10px;
-    font-size: 16px;
-    color: #333;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 40px;
-    text-align: center;
-    transition: background-color 0.3s ease;
+  background-color: #f1f1f1;
+  padding: 10px;
+  font-size: 16px;
+  color: #333;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 40px;
+  text-align: center;
+  transition: background-color 0.3s ease;
 }
 
 .available-courts-item:hover {
-    background-color: #4CAF50;
-    color: white;
+  background-color: #4caf50;
+  color: white;
 }
 
 /* 已選中的場地 */
 .available-courts-item.selected {
-    background-color: #4CAF50;
-    color: white;
+  background-color: #4caf50;
+  color: white;
 }
 
 /* 按鈕區域 */
 .confirm-selection-actions {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
 }
 
 /* 確認按鈕 */
 .confirm-button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 12px;
-    font-size: 16px;
-    cursor: pointer;
-    width: 30%;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 30%;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
 }
 
 .confirm-button:hover {
-    background-color: #45a049;
-    transform: scale(1.05);
+  background-color: #45a049;
+  transform: scale(1.05);
 }
 
 /* 取消按鈕 */
 .cancel-button {
-    background-color: #f44336;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 12px;
-    font-size: 16px;
-    cursor: pointer;
-    width: 30%;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 30%;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
 }
 
 .cancel-button:hover {
-    background-color: #e53935;
-    transform: scale(1.05);
+  background-color: #e53935;
+  transform: scale(1.05);
 }
