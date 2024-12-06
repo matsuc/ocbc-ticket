@@ -61,7 +61,7 @@ const Book = ({
       };
 
       const response = await axios.post(
-        'http://localhost:3000/api/proxy/clientportal2/FacilityBookings/WizardSteps/SetFacilityBookingDetailsWizardStep/Next',
+        'https://ocbc-ticket.vercel.app/api/proxy/clientportal2/FacilityBookings/WizardSteps/SetFacilityBookingDetailsWizardStep/Next',
         payload,
         {
           headers: {

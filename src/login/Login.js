@@ -22,7 +22,7 @@ const Login = ({ onSubmit }) => {
     try {
       // 使用 axios 發送 POST 請求
       const response = await axios.post(
-        'http://localhost:3000/api/proxy/clientportal2/Auth/Login',
+        'https://ocbc-ticket.vercel.app/api/proxy/clientportal2/Auth/Login',
         payload,
         {
           headers: {

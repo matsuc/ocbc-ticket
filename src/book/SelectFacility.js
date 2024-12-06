@@ -37,7 +37,7 @@ const SelectFacility = ({ userId, onSubmit }) => {
       };
 
       const response = await axios.get(
-        'http://localhost:3000/api/proxy/clientportal2/FacilityBookings/BookFacility/Start',
+        'https://ocbc-ticket.vercel.app/api/proxy/clientportal2/FacilityBookings/BookFacility/Start',
         {
           params: params,
           withCredentials: true,
