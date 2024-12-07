@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import './SelectFacility.css';
+import booking from './bookingService';
 
 const SelectFacility = ({ userId, onSubmit }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
   const [selectedLength, setSelectedLength] = useState('60');
+  const [logs, setLogs] = useState([]); // 用於記錄 log
   const [loading, setLoading] = useState(false);
+  const cancelSearchRef = useRef(false);
 
   // 更新當前時間
   useEffect(() => {
@@ -17,15 +20,14 @@ const SelectFacility = ({ userId, onSubmit }) => {
     return () => clearInterval(timer);
   }, []);
 
+  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
   // 格式化時間
   const formatDateTime = (date) =>
     `${date.toLocaleDateString()} ${date.toLocaleTimeString('en-GB')}`;
 
   // 查詢可用場地
-  const searchAvailableCourts = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-
+  const searchAvailableCourts = async () => {
     try {
       // data format: "YYYY-MM-DDThh:mm:ss"
       const selectedDateTime = `${selectedDate}T${selectedTime}:00`;
@@ -56,23 +58,68 @@ const SelectFacility = ({ userId, onSubmit }) => {
       return { sessionId, availableCourts };
     } catch (error) {
       alert('Error: ' + JSON.stringify(error.message));
-      return {}; // 如果有錯誤，返回一個空對象
-    } finally {
+      cancelSearchRef.current = true;
       setLoading(false);
+      return {};
     }
   };
 
   // 表單提交處理
   const handleSearchSubmit = async (e) => {
     e.preventDefault();
-    const { availableCourts } = await searchAvailableCourts(e);
-    if (availableCourts !== undefined) {
-      alert(
-        availableCourts.length === 0
-          ? '沒有可用場地'
-          : `可用場地: ${availableCourts.map((court) => court - 70)}`,
-      );
+    setLoading(true);
+    setLogs((prevLogs) => []);
+    cancelSearchRef.current = false;
+
+    let success = false; // 标记是否成功获取到可用场地
+    let sessionId;
+    let availableCourts;
+
+    while (!success && !cancelSearchRef.current) {
+      // 只有在没有成功或者没有取消时继续执行
+      const result = await searchAvailableCourts(); // 等待 searchAvailableCourts 完成
+      sessionId = result.sessionId;
+      availableCourts = result.availableCourts;
+
+      if (availableCourts !== undefined) {
+        if (availableCourts.length === 0) {
+          setLogs((prevLogs) => [...prevLogs, '沒有可用場地']);
+        } else if (availableCourts.length > 0) {
+          const selectedDateTime = `${selectedDate}T${selectedTime}:00`;
+          const selectedCourt =
+            availableCourts[Math.floor(Math.random() * availableCourts.length)];
+
+          const bookingResult = await booking({
+            selectedLength,
+            selectedDateTime,
+            userId,
+            selectedCourt,
+            sessionId,
+            maxRetries: 1,
+          });
+
+          success = bookingResult.success;
+          if (!success) {
+            setLogs((prevLogs) => [...prevLogs, bookingResult.message]);
+          } else {
+            setLogs((prevLogs) => [
+              ...prevLogs,
+              {
+                message: bookingResult.message,
+                link: bookingResult.redirectUrl,
+              },
+            ]);
+          }
+        }
+      }
+
+      if (!success) {
+        setLogs((prevLogs) => [...prevLogs, '等待下一次尝试...']);
+        await sleep(3000);
+      }
     }
+
+    setLoading(false); // 完成搜索或取消后，停止 loading
   };
 
   // 表單提交處理
@@ -93,6 +140,11 @@ const SelectFacility = ({ userId, onSubmit }) => {
         availableCourts,
       );
     }
+  };
+
+  const handleCancelClick = () => {
+    cancelSearchRef.current = true;
+    setLoading(false);
   };
 
   return (
@@ -154,24 +206,69 @@ const SelectFacility = ({ userId, onSubmit }) => {
         </div>
         {/* 提交按鈕 */}
         <div className="form-group buttons-group">
-          <button
-            type="button"
-            disabled={loading}
-            className="facility-button"
-            onClick={handleSearchSubmit}
-          >
-            查詢
-          </button>
+          {loading && (
+            <button
+              type="button"
+              className="facility-button cancel"
+              onClick={handleCancelClick}
+            >
+              取消
+            </button>
+          )}
+          {!loading && (
+            <button
+              type="button"
+              disabled={loading}
+              className={'facility-button'}
+              onClick={handleSearchSubmit}
+            >
+              搶場地
+            </button>
+          )}
           <button
             type="submit"
             disabled={loading}
             className="facility-button"
             onClick={handleSubmit}
           >
-            確定
+            預約
           </button>
         </div>
       </form>
+      <div className="log-container">
+        <strong>日誌記錄:</strong>
+        <div className="log-box">
+          {logs.length > 0 ? (
+            logs.map((log, index) => (
+              <div key={index} className="log-entry">
+                {typeof log === 'string' ? (
+                  log
+                ) : (
+                  <>
+                    {log.message}
+                    {log.link && (
+                      <a
+                        href={log.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          marginLeft: '10px',
+                          color: 'blue',
+                          textDecoration: 'underline',
+                        }}
+                      >
+                        {log.link}
+                      </a>
+                    )}
+                  </>
+                )}
+              </div>
+            ))
+          ) : (
+            <p>目前沒有日誌記錄。</p>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import booking from './bookingService';
 import './Book.css';
 
 const Book = ({
@@ -18,8 +18,6 @@ const Book = ({
 
   const [targetMinute, setTargetMinute] = useState(59); // 目标分钟数
   const [targetSecond, setTargetSecond] = useState(55); // 目标秒数
-  // data format: "YYYY-MM-DDThh:mm:ss"
-  const selectedDateTime = `${selectedDate}T${selectedTime}:00`;
 
   // 更新當前時間
   useEffect(() => {
@@ -28,6 +26,8 @@ const Book = ({
     }, 1000);
     return () => clearInterval(timer);
   }, []);
+
+  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   // 格式化時間
   const formatDateTime = (date) =>
@@ -47,97 +47,7 @@ const Book = ({
     return daysOfWeek[dayIndex];
   };
 
-  const beforeBook = async (e) => {
-    e.preventDefault();
-
-    try {
-      const payload = {
-        Duration: selectedLength,
-        RequiredNumberOfSlots: null,
-        StartTime: selectedDateTime,
-        UserId: userId,
-        ZoneId: selectedCourt,
-      };
-
-      const response = await axios.post(
-        '/api/clientportal2/FacilityBookings/WizardSteps/SetFacilityBookingDetailsWizardStep/Next',
-        payload,
-        {
-          headers: {
-            'Cp-Book-Facility-Session-Id': sessionId,
-          },
-          withCredentials: true,
-        },
-      );
-
-      console.log('成功鎖定預約');
-      return response.data['Data']['RuleId'];
-    } catch (error) {
-      setLogs((prevLogs) => [
-        ...prevLogs,
-        `無法鎖定預約: ${JSON.stringify(error.message)}`,
-      ]);
-    }
-  };
-
-  const booking = async (e, ruleId) => {
-    e.preventDefault();
-    setLoading(true);
-
-    const maxRetries = 20; // 最大重试次数
-    let attempt = 0; // 当前尝试次数
-    let success = false; // 标记是否成功
-
-    while (attempt < maxRetries && !success) {
-      try {
-        attempt++;
-        const payload = {
-          ruleId: ruleId,
-          OtherCalendarEventBookedAtRequestedTime: false,
-          HasUserRequiredProducts: false,
-        };
-
-        const response = await axios.post(
-          '/api/clientportal2/FacilityBookings/WizardSteps/ChooseBookingRuleStep/Next',
-          payload,
-          {
-            headers: {
-              'Cp-Book-Facility-Session-Id': sessionId,
-            },
-            withCredentials: true,
-          },
-        );
-
-        // 记录成功响应并退出重试
-        setLogs((prevLogs) => [
-          ...prevLogs,
-          {
-            time: new Date().toLocaleString(),
-            message: `預約成功`,
-            link: response.data['Redirect'],
-          },
-        ]);
-        success = true;
-      } catch (error) {
-        // 如果是最后一次失败，记录错误信息
-        if (attempt === maxRetries) {
-          setLogs((prevLogs) => [
-            ...prevLogs,
-            `${new Date().toLocaleString()} 預約失敗: ${JSON.stringify(error.message)}`,
-          ]);
-        } else {
-          // 不是最后一次失败，记录重试日志
-          const currentAttempt = attempt;
-          setLogs((prevLogs) => [
-            ...prevLogs,
-            `${new Date().toLocaleString()} 預約失敗 (第${currentAttempt}次重試): ${JSON.stringify(error.message)}`,
-          ]);
-        }
-      }
-    }
-  };
-
-  const waitUntil = () => {
+  const waitUntil = async () => {
     // 获取当前时间
     const currentTime = new Date();
 
@@ -155,26 +65,18 @@ const Book = ({
     targetTime.setMinutes(targetMinute, targetSecond, 0); // 设置目标分钟和秒钟，设置毫秒为0
 
     const timeToTarget = targetTime - currentTime;
-    setLogs((prevLogs) => [...prevLogs, `等待時間: ${timeToTarget / 1000} 秒`]);
 
-    return timeToTarget;
-  };
+    if (timeToTarget > 0) {
+      const minutes = Math.floor(timeToTarget / 60000); // 1分钟 = 60000毫秒
+      const seconds = Math.floor((timeToTarget % 60000) / 1000); // 剩余的秒数
 
-  // 添加 log 的功能
-  const handleQuickBookClick = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setLogs((prevLogs) => []);
+      setLogs((prevLogs) => [
+        ...prevLogs,
+        `等待時間: ${minutes} 分 ${seconds} 秒`,
+      ]);
 
-    const timestamp = new Date().toLocaleString();
-    setLogs((prevLogs) => [...prevLogs, `預約開始於 ${timestamp}`]);
-
-    const ruleId = await beforeBook(e);
-    if (ruleId !== undefined) {
-      await booking(e, ruleId);
+      await sleep(timeToTarget);
     }
-
-    setLoading(false);
   };
 
   // 添加 log 的功能
@@ -183,30 +85,30 @@ const Book = ({
     setLoading(true);
     setLogs((prevLogs) => []);
 
-    const timeToTarget = waitUntil();
+    await waitUntil();
 
-    // 设置一个定时器
-    const id = setTimeout(async () => {
-      const timestamp = new Date().toLocaleString();
-      setLogs((prevLogs) => [...prevLogs, `預約開始於 ${timestamp}`]);
+    const timestamp = new Date().toLocaleString();
+    setLogs((prevLogs) => [...prevLogs, `預約開始於 ${timestamp}`]);
 
-      const ruleId = await beforeBook(e);
-      if (ruleId !== undefined) {
-        await booking(e, ruleId);
-      }
+    const selectedDateTime = `${selectedDate}T${selectedTime}:00`;
+    const response = await booking({
+      selectedLength,
+      selectedDateTime,
+      userId,
+      selectedCourt,
+      sessionId,
+      maxRetries: 20,
+    });
 
-      setLoading(false);
-    }, timeToTarget);
+    setLogs((prevLogs) => [
+      ...prevLogs,
+      {
+        message: response.message,
+        link: response.redirectUrl,
+      },
+    ]);
 
-    setTimeoutId(id); // 保存定时器 ID 以便在取消时清除
-  };
-
-  const handleCancelClick = () => {
-    if (timeoutId) {
-      clearTimeout(timeoutId); // 清除定时器
-      setLoading(false); // 取消时设置 loading 为 false
-      setLogs((prevLogs) => [...prevLogs, '預約取消']);
-    }
+    setLoading(false);
   };
 
   const handleCourtClick = () => {
@@ -261,29 +163,16 @@ const Book = ({
       </button>
 
       {/* 開始預約按鈕 */}
-      {
-        <button
-          className={'start-button'}
-          disabled={loading}
-          onClick={handleQuickBookClick}
-        >
-          即刻預約...
-        </button>
-      }
-      {
+      {!loading && (
         <button
           className={'start-button'}
           disabled={loading}
           onClick={handleWaitBookClick}
         >
-          等待預約...
-        </button>
-      }
-      {loading && (
-        <button className={'start-button cancel'} onClick={handleCancelClick}>
-          取消
+          預約
         </button>
       )}
+      {loading && <button className={'start-button cancel'}>預約中</button>}
 
       {/* 顯示日誌記錄 */}
       <div className="log-container">
