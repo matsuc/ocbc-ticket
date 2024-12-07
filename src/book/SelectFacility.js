@@ -83,7 +83,8 @@ const SelectFacility = ({ userId, onSubmit }) => {
 
       if (availableCourts !== undefined) {
         if (availableCourts.length === 0) {
-          setLogs((prevLogs) => [...prevLogs, '沒有可用場地，等待下一次尝试...`']);
+          setLogs((prevLogs) => [...prevLogs, '沒有可用場地，等待下一次尝试...']);
+          await sleep(3000);
         } else if (availableCourts.length > 0) {
           setLogs((prevLogs) => [...prevLogs, '找到可用場地，開始預約...']);
           const selectedDateTime = `${selectedDate}T${selectedTime}:00`;
