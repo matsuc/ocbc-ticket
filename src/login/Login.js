@@ -31,7 +31,6 @@ const Login = ({ onSubmit }) => {
           withCredentials: true,
         },
       );
-      console.log(JSON.stringify(response.headers));
 
       // Axios 會自動處理 JSON 回應
       const token = response.headers['jwt-token'];

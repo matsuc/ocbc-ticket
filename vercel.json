@@ -5,6 +5,8 @@
       "use": "@vercel/node"
     }
   ],
+  "buildCommand": "npm install && npm run build",
+  "installCommand": "npm install && pwd",
   "rewrites": [
     {
       "source": "/api/index",
