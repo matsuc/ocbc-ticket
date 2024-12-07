@@ -83,8 +83,9 @@ const SelectFacility = ({ userId, onSubmit }) => {
 
       if (availableCourts !== undefined) {
         if (availableCourts.length === 0) {
-          setLogs((prevLogs) => [...prevLogs, '沒有可用場地']);
+          setLogs((prevLogs) => [...prevLogs, '沒有可用場地，等待下一次尝试...`']);
         } else if (availableCourts.length > 0) {
+          setLogs((prevLogs) => [...prevLogs, '找到可用場地，開始預約...']);
           const selectedDateTime = `${selectedDate}T${selectedTime}:00`;
           const selectedCourt =
             availableCourts[Math.floor(Math.random() * availableCourts.length)];
@@ -100,7 +101,8 @@ const SelectFacility = ({ userId, onSubmit }) => {
 
           success = bookingResult.success;
           if (!success) {
-            setLogs((prevLogs) => [...prevLogs, bookingResult.message]);
+            setLogs((prevLogs) => [...prevLogs, `${bookingResult.message} 等待下一次尝试...`]);
+            await sleep(3000);
           } else {
             setLogs((prevLogs) => [
               ...prevLogs,
@@ -111,11 +113,6 @@ const SelectFacility = ({ userId, onSubmit }) => {
             ]);
           }
         }
-      }
-
-      if (!success) {
-        setLogs((prevLogs) => [...prevLogs, '等待下一次尝试...']);
-        await sleep(3000);
       }
     }
 
