@@ -61,7 +61,7 @@ const Book = ({
       };
 
       const response = await axios.post(
-        'https://ocbc-ticket.vercel.app/api/proxy/clientportal2/FacilityBookings/WizardSteps/SetFacilityBookingDetailsWizardStep/Next',
+        '/api/clientportal2/FacilityBookings/WizardSteps/SetFacilityBookingDetailsWizardStep/Next',
         payload,
         {
           headers: {
@@ -98,7 +98,7 @@ const Book = ({
         };
 
         const response = await axios.post(
-          'https://ocbc-ticket.vercel.app/api/proxy/clientportal2/FacilityBookings/WizardSteps/ChooseBookingRuleStep/Next',
+          '/api/clientportal2/FacilityBookings/WizardSteps/ChooseBookingRuleStep/Next',
           payload,
           {
             headers: {
@@ -111,7 +111,11 @@ const Book = ({
         // 记录成功响应并退出重试
         setLogs((prevLogs) => [
           ...prevLogs,
-          `${new Date().toLocaleString()} 預約成功: ${response.data['Redirect']}`,
+          {
+            time: new Date().toLocaleString(),
+            message: `預約成功`,
+            link: response.data['Redirect'],
+          },
         ]);
         success = true;
       } catch (error) {
@@ -288,7 +292,27 @@ const Book = ({
           {logs.length > 0 ? (
             logs.map((log, index) => (
               <div key={index} className="log-entry">
-                {log}
+                {typeof log === 'string' ? (
+                  log
+                ) : (
+                  <>
+                    {log.message}
+                    {log.link && (
+                      <a
+                        href={log.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          marginLeft: '10px',
+                          color: 'blue',
+                          textDecoration: 'underline',
+                        }}
+                      >
+                        點擊查看
+                      </a>
+                    )}
+                  </>
+                )}
               </div>
             ))
           ) : (

@@ -1,20 +1,8 @@
 {
-  "builds": [
-    {
-      "src": "api/*.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "buildCommand": "npm install && npm run build",
-  "installCommand": "npm install && pwd",
   "rewrites": [
     {
-      "source": "/api/index",
-      "destination": "/api/index.js"
-    },
-    {
-      "source": "/api/proxy/(.*)",
-      "destination": "/api/proxy.js"
+      "source": "/api/:path*",
+      "destination": "https://sportshub.perfectgym.com/:path*"
     }
   ]
 }
