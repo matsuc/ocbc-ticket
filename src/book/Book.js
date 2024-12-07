@@ -20,7 +20,6 @@ const Book = ({
   const [targetSecond, setTargetSecond] = useState(55); // 目标秒数
   // data format: "YYYY-MM-DDThh:mm:ss"
   const selectedDateTime = `${selectedDate}T${selectedTime}:00`;
-  const maxRetries = 20; // 最大重试次数
 
   // 更新當前時間
   useEffect(() => {
@@ -85,6 +84,7 @@ const Book = ({
     e.preventDefault();
     setLoading(true);
 
+    const maxRetries = 20; // 最大重试次数
     let attempt = 0; // 当前尝试次数
     let success = false; // 标记是否成功
 
@@ -308,7 +308,7 @@ const Book = ({
                           textDecoration: 'underline',
                         }}
                       >
-                        點擊查看
+                        {log.link}
                       </a>
                     )}
                   </>
